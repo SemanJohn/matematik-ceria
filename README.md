@@ -10,6 +10,10 @@ Soalan dijana secara automatik dan rawak — tidak akan berulang. Setiap topik i
 
 Gamifikasi: kumpul bintang setiap kuiz, buka topik seterusnya bila lulus (peta pengembaraan), 12 lencana pencapaian, streak harian 🔥, Cabaran Masa 60 saat, dan Kedai Avatar (beli maskot guna bintang).
 
+Semua grafik dilukis sebagai SVG dalam kod — maskot, lencana, ikon topik dan rajah soalan. Tiada fail imej langsung, jadi aplikasi ringan, tajam pada skrin bersaiz apa pun, dan berfungsi tanpa internet.
+
+Setiap tahun ada warna tersendiri (Tahun 1 merah hingga Tahun 6 ungu) supaya anak mudah membezakannya. Ada animasi ringan: kad melantun masuk, bintang mengisi satu demi satu, dan confetti bila dapat 3 bintang. Jika peranti ditetapkan untuk mengurangkan gerakan, semua animasi dimatikan secara automatik.
+
 Berfungsi 100% tanpa internet selepas dibuka kali pertama.
 
 ## Cara pasang di telefon anak
@@ -75,6 +79,7 @@ Jika PIN terlupa, ia tidak boleh dipulihkan — tetapi kemajuan pada peranti itu
 |---|---|
 | `index.html` | Rangka aplikasi |
 | `config.js` | Nombor versi dan alamat Google Sheet |
+| `art.js` | Semua grafik SVG: 9 maskot, 12 lencana, 16 ikon topik, ikon antara muka, palet warna setiap tahun |
 | `engine.js` | Penjana soalan + senarai topik silibus KSSR |
 | `store.js` | Simpanan kemajuan, lencana, kedai avatar, logik gabungan |
 | `sync.js` | Log masuk dan penyegerakan dengan Google Sheet |
