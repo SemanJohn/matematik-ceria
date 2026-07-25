@@ -178,7 +178,6 @@ function homeView() {
       ${bigBtn("Lencana Saya", "blue", "nav-lencana", "", ICON.lencanaUi())}
       ${bigBtn("Kedai Avatar", "red", "nav-kedai", "", ICON.kedai())}
     </div>
-    <button class="link" data-act="pasang" hidden id="installBtn">${ICON.pasang()} Pasang aplikasi ini</button>
     <p class="versi">Versi ${esc(APP_VERSION)}</p>
   </div>`;
 }
@@ -630,7 +629,6 @@ function render() {
   }
   setTema(temaUntukSkrin());
   app.innerHTML = html + (modal ? difficultyDialog(modal) : "");
-  if (screen.name === "home") setupInstallButton();
   window.scrollTo(0, 0);
 }
 
@@ -692,33 +690,8 @@ app.addEventListener("click", (e) => {
       render();
       break;
     }
-    case "pasang": doInstall(); break;
   }
 });
-
-/* ---------- PWA: pasang ---------- */
-
-let deferredPrompt = null;
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  setupInstallButton();
-});
-
-function setupInstallButton() {
-  const btn = document.getElementById("installBtn");
-  if (btn && deferredPrompt) btn.hidden = false;
-}
-
-async function doInstall() {
-  if (!deferredPrompt) return;
-  deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  const btn = document.getElementById("installBtn");
-  if (btn) btn.hidden = true;
-}
 
 /* ---------- PWA: kemas kini automatik ----------
  * Service worker mengambil fail dari rangkaian dahulu, jadi setiap kali ada

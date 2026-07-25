@@ -416,9 +416,6 @@ export const ICON = {
   keluar: (c = "#fff") => svg(`
     <path d="M40 20H18v60h22" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round"/>
     <path d="M56 32 76 50 56 68M76 50H38" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>`, "ui"),
-  pasang: (c = "#fff") => svg(`
-    <path d="M50 14v44M32 44l18 18 18-18" fill="none" stroke="${c}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M20 74h60" stroke="${c}" stroke-width="9" stroke-linecap="round"/>`, "ui"),
   beg: (c = "#fff") => svg(`
     <path d="M22 34h56l-5 52H27Z" fill="${c}"/>
     <path d="M38 40V26a12 12 0 0 1 24 0v14" fill="none" stroke="${c}" stroke-width="7"/>`, "ui")
