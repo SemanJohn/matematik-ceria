@@ -1,0 +1,35 @@
+{
+  "name": "Matematik Ceria",
+  "short_name": "Matematik",
+  "description": "Latihan Matematik KSSR (Semakan 2017) Tahun 1 hingga Tahun 6. Soalan dijana automatik, berfungsi tanpa internet.",
+  "lang": "ms",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#7B4FD6",
+  "theme_color": "#7B4FD6",
+  "categories": ["education", "kids"],
+  "icons": [
+    { "src": "./icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mula Belajar",
+      "short_name": "Belajar",
+      "url": "./index.html#belajar",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Cabaran Masa",
+      "short_name": "Cabaran",
+      "url": "./index.html#cabaran",
+      "icons": [{ "src": "./icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

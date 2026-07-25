@@ -1,0 +1,231 @@
+/* Matematik Ceria — gaya web (padanan tema Compose asal) */
+
+:root {
+  --ungu: #7B4FD6;
+  --ungu2: #9C6FE4;
+  --ungu3: #BEA0F0;
+  --hijau: #43A047;
+  --oren: #FB8C00;
+  --biru: #039BE5;
+  --merah: #E53935;
+  --emas: #FFD54F;
+  --teks: #333333;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  background: linear-gradient(180deg, var(--ungu) 0%, var(--ungu2) 50%, var(--ungu3) 100%);
+  background-attachment: fixed;
+  color: #fff;
+  overscroll-behavior-y: contain;
+}
+
+#app { min-height: 100dvh; }
+
+.wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 20px 18px calc(28px + env(safe-area-inset-bottom));
+  padding-top: calc(20px + env(safe-area-inset-top));
+}
+
+.wrap.center { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.wrap.mid { justify-content: center; min-height: 100dvh; }
+
+.row { display: flex; align-items: center; width: 100%; }
+.row.spread { justify-content: space-between; }
+
+h1 { font-size: 2rem; font-weight: 800; margin: 4px 0 2px; }
+h2 { font-size: 1.4rem; font-weight: 800; margin: 0; }
+.sub { opacity: .9; margin: 0 0 6px; }
+.white-b { font-weight: 700; margin: 8px 0; }
+.big-txt { font-size: 1.5rem; }
+.gold { color: var(--emas); font-weight: 700; margin: 4px 0; }
+
+.chip {
+  background: rgba(255,255,255,.25);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-weight: 700;
+  font-size: .95rem;
+}
+
+.avatar { font-size: 5rem; line-height: 1.1; margin-top: 14px; }
+.score { font-size: 2.6rem; font-weight: 800; }
+.big-stars { font-size: 2.4rem; letter-spacing: 2px; }
+
+/* Butang besar */
+.stack { width: 100%; display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
+
+.big {
+  width: 100%;
+  min-height: 58px;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: transform .08s ease, filter .12s ease;
+}
+.big:active { transform: scale(.97); }
+.big.green { background: var(--hijau); }
+.big.orange { background: var(--oren); }
+.big.blue { background: var(--biru); }
+.big.red { background: var(--merah); }
+
+.link {
+  background: none; border: none; color: #fff; text-decoration: underline;
+  font: inherit; cursor: pointer; margin-top: 16px; opacity: .9;
+}
+
+/* Header */
+.hdr { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.back {
+  background: rgba(255,255,255,.25);
+  border: none; color: #fff; font-size: 1.4rem; font-weight: 700;
+  border-radius: 999px; padding: 4px 16px; cursor: pointer; line-height: 1.5;
+}
+
+/* Kad */
+.card {
+  display: flex; width: 100%; text-align: left;
+  background: #fff; border: none; border-radius: 18px;
+  padding: 16px; margin: 8px 0;
+  box-shadow: 0 3px 10px rgba(0,0,0,.16);
+  cursor: pointer; font-family: inherit;
+  transition: transform .08s ease;
+}
+.card:active:not(:disabled) { transform: scale(.985); }
+.card:disabled { cursor: default; }
+.card-title { font-size: 1.05rem; font-weight: 700; color: var(--teks); }
+.card-meta { font-size: .95rem; font-weight: 700; color: var(--ungu); }
+
+/* Peta topik */
+.map { display: flex; flex-direction: column; gap: 10px; }
+.map-row { display: flex; }
+.map-row.right { justify-content: flex-end; }
+.card.topic { width: 88%; align-items: center; gap: 12px; margin: 0; }
+.card.topic.locked { background: rgba(255,255,255,.5); }
+.t-emoji { font-size: 2rem; }
+.t-body { display: flex; flex-direction: column; }
+.t-stars { font-size: 1rem; }
+
+/* Soalan */
+.back.small { font-size: 1.05rem; padding: 3px 12px; margin-right: 10px; flex: none; }
+.qhead { margin-bottom: 8px; gap: 10px; }
+.qhead .qtopic { flex: 1; }
+.qtopic { font-weight: 700; font-size: .95rem; }
+.qcount { font-weight: 800; font-size: 1.05rem; }
+
+.bar-track { height: 10px; background: rgba(255,255,255,.3); border-radius: 999px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--emas); transition: width .3s ease; }
+
+.qcard {
+  background: #fff; border-radius: 20px; padding: 18px;
+  margin-top: 18px; box-shadow: 0 4px 14px rgba(0,0,0,.18);
+  text-align: center;
+}
+.qtext { font-size: 1.15rem; font-weight: 700; color: var(--teks); margin: 0; }
+.vwrap { margin-top: 12px; display: flex; justify-content: center; }
+.vis { max-width: 100%; height: auto; }
+
+.opts { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+.opt {
+  width: 100%; background: #fff; border: none; border-radius: 16px;
+  padding: 16px; font-size: 1.05rem; font-weight: 700; color: var(--teks);
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,.14);
+  transition: transform .08s ease;
+}
+.opt:active:not(:disabled) { transform: scale(.98); }
+.opt.correct { background: #66BB6A; color: #fff; }
+.opt.wrong { background: #EF5350; color: #fff; }
+.opt.dim { background: rgba(255,255,255,.55); }
+
+.fb { text-align: center; font-weight: 700; font-size: 1.05rem; margin-top: 14px; }
+
+/* Panel lencana baharu */
+.badge-panel {
+  background: #fff; color: var(--teks); border-radius: 16px;
+  padding: 14px; margin-top: 14px; font-weight: 600;
+}
+.badge-panel strong { display: block; margin-bottom: 4px; }
+
+/* Grid */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 12px; }
+.grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+
+.shop-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: #fff; border: none; border-radius: 16px; padding: 10px;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 2px 8px rgba(0,0,0,.14);
+}
+.shop-item.eq { background: #FFF176; }
+.s-emoji { font-size: 2.2rem; }
+.s-name { font-size: .7rem; color: #555; text-align: center; }
+.s-cost { font-size: .78rem; font-weight: 700; color: var(--ungu); }
+
+.badge {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  background: #fff; border-radius: 16px; padding: 12px; text-align: center;
+}
+.badge.off { background: rgba(255,255,255,.35); }
+.b-emoji { font-size: 2rem; }
+.b-name { font-weight: 700; font-size: .82rem; color: var(--teks); }
+.b-desc { font-size: .7rem; color: #666; }
+
+/* Gambar soalan */
+.emojis { font-size: 1.6rem; line-height: 1.5; }
+.coins { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; }
+.coin {
+  background: var(--emas); color: #6D4C00; border-radius: 999px;
+  width: 58px; height: 58px; display: flex; align-items: center; justify-content: center;
+  font-size: .72rem; font-weight: 700; text-align: center;
+}
+.note {
+  border-radius: 6px; padding: 12px 14px; font-weight: 700; color: #1B5E20;
+}
+.note1 { background: #81C784; }
+.note5 { background: #81D4FA; }
+
+.bars { display: flex; justify-content: space-evenly; align-items: flex-end; width: 100%; min-height: 160px; }
+.bar-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+.bar-val { font-size: .8rem; font-weight: 700; color: var(--teks); }
+.bar { width: 34px; border-radius: 6px 6px 0 0; }
+.bar-lbl { font-size: .68rem; color: var(--teks); margin-top: 2px; }
+
+/* Modal */
+.modal-bg {
+  position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 20;
+}
+.modal {
+  background: #fff; color: var(--teks); border-radius: 22px;
+  padding: 22px; width: 100%; max-width: 380px; text-align: center;
+}
+.modal h3 { margin: 0 0 6px; font-size: 1.15rem; }
+.modal p { margin: 0; }
+.modal .link { color: var(--ungu); margin-top: 12px; }
+
+/* Toast */
+.toast {
+  position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
+  background: rgba(0,0,0,.82); color: #fff; padding: 12px 18px;
+  border-radius: 14px; font-weight: 600; z-index: 40; max-width: 90%;
+  text-align: center; font-size: .92rem;
+}
+
+@media (min-width: 620px) {
+  .grid3 { grid-template-columns: repeat(4, 1fr); }
+  .grid2 { grid-template-columns: repeat(3, 1fr); }
+}
