@@ -23,9 +23,13 @@ Ikon akan muncul di skrin utama seperti aplikasi biasa dan dibuka skrin penuh ta
 
 Aplikasi menyemak fail terbaharu setiap kali dibuka semasa ada internet, jadi telefon anak sentiasa mendapat versi terkini dengan sendirinya. Tiada apa-apa perlu ditekan.
 
-Nombor versi dipaparkan di bahagian bawah skrin utama (contoh `Versi 1.1.0`). Bandingkan dengan nilai `APP_VERSION` dalam `config.js` untuk mengesahkan telefon sudah dikemas kini. Jika masih lama, tutup aplikasi sepenuhnya dan buka semula sekali.
+Nombor versi dipaparkan di bahagian bawah skrin utama (contoh `Versi 1.2.0`). Bandingkan dengan nilai `APP_VERSION` dalam `config.js` untuk mengesahkan telefon sudah dikemas kini.
 
 Setiap kali anda mengubah aplikasi, naikkan `APP_VERSION` dalam `config.js` supaya perubahan itu boleh dilihat.
+
+**Berapa lama?** CDN GitHub Pages menyimpan fail selama 10 minit (`max-age=600`). Jadi selepas anda muat naik perubahan, telefon akan dapat versi baharu dalam masa kira-kira 10 minit — automatik, tetapi bukan serta-merta.
+
+**Cara penerbitan.** Repo ini menerbitkan melalui GitHub Actions (`.github/workflows/deploy.yml`), bukan saluran Pages klasik. Saluran klasik pernah tersekat berjam-jam dengan ralat dalaman GitHub; saluran Actions siap dalam kira-kira 20 saat dan memaparkan sebab kegagalan dengan jelas. Setiap tolakan ke `main` mencetuskannya secara automatik. Anda boleh melihat statusnya di tab **Actions**.
 
 ## Log masuk dan simpan kemajuan (pilihan)
 
@@ -52,6 +56,8 @@ Data disimpan dalam **Google Sheet milik anda sendiri** — bukan pelayan orang 
    ```
 
 Butang **Log masuk** akan muncul di penjuru atas kiri sebaik sahaja URL itu diisi.
+
+Untuk repo ini, langkah-langkah di atas sudah siap dan diuji.
 
 ### Bagaimana kemajuan digabungkan
 
