@@ -85,6 +85,16 @@ window.addEventListener("popstate", (e) => {
   render();
 });
 
+/* Pintasan PWA (#belajar, #cabaran) hanya menukar hash. Jika aplikasi sudah
+   terbuka, popstate tidak berlaku — jadi kita dengar hashchange juga. */
+window.addEventListener("hashchange", () => {
+  const s = screenFromHash();
+  if (hashOf(s) === hashOf(screen)) return;
+  clearTimers();
+  screen = s;
+  render();
+});
+
 function back() {
   history.back();
 }
