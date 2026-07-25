@@ -51,9 +51,13 @@ self.addEventListener("activate", (e) => {
 async function networkFirst(req) {
   const cache = await caches.open(CACHE);
 
-  // .catch di sini penting: tanpanya, kegagalan rangkaian yang berlaku
-  // selepas had masa tamat akan menjadi ralat tergantung.
-  const fromNet = fetch(req)
+  // `cache: no-cache` memaksa pelayar mengesahkan dengan pelayan dan bukan
+  // menggunakan salinan lamanya sendiri. Tanpa ini, fail lama boleh terus
+  // digunakan sehingga 10 minit walaupun versi baharu sudah diterbitkan.
+  //
+  // .catch pula penting: tanpanya, kegagalan rangkaian yang berlaku selepas
+  // had masa tamat akan menjadi ralat tergantung.
+  const fromNet = fetch(req.url, { cache: "no-cache", credentials: "same-origin" })
     .then((res) => {
       if (res && res.status === 200 && res.type === "basic") cache.put(req, res.clone());
       return res;
