@@ -36,6 +36,52 @@ export const AvatarShop = {
 
 const KEY = "matematik_ceria_progress";
 
+/**
+ * Gabungkan dua salinan kemajuan tanpa kehilangan data.
+ * Semua kiraan hanya bertambah, jadi kita ambil nilai tertinggi bagi setiap
+ * medan dan gabungan penuh bagi senarai. Ini bermakna dua peranti yang
+ * dimainkan berasingan akan bercantum dengan betul, bukan saling menimpa.
+ */
+export function mergeStates(a, b) {
+  a = a || {};
+  b = b || {};
+  const maxN = (k) => Math.max(a[k] || 0, b[k] || 0);
+
+  const stars = Object.assign({}, a.stars || {});
+  for (const [id, v] of Object.entries(b.stars || {})) {
+    stars[id] = Math.max(stars[id] || 0, v || 0);
+  }
+
+  const owned = [...new Set([...(a.owned || []), ...(b.owned || [])])];
+  const badges = [...new Set([...(a.badges || []), ...(b.badges || [])])];
+
+  // Kira semula perbelanjaan daripada senarai avatar yang dimiliki,
+  // supaya baki bintang kekal betul selepas gabungan.
+  const spent = owned.reduce((sum, id) => {
+    const item = AvatarShop.all.find((x) => x.id === id);
+    return sum + (item ? item.cost : 0);
+  }, 0);
+
+  const aDay = a.lastDay ?? -10;
+  const bDay = b.lastDay ?? -10;
+  const newer = aDay >= bDay ? a : b;
+
+  return {
+    stars,
+    owned,
+    badges,
+    spent,
+    earned: maxN("earned"),
+    quizzes: maxN("quizzes"),
+    perfects: maxN("perfects"),
+    best_challenge: maxN("best_challenge"),
+    hard3: !!(a.hard3 || b.hard3),
+    lastDay: Math.max(aDay, bDay),
+    streak: aDay === bDay ? maxN("streak") : newer.streak || 0,
+    equipped: newer.equipped || a.equipped || b.equipped || "budak"
+  };
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
@@ -63,8 +109,26 @@ class Store {
     if (!this.d.owned) this.d.owned = [];
   }
 
-  _flush() { save(this.d); }
+  _flush() {
+    save(this.d);
+    if (this.onChange) {
+      try { this.onChange(); } catch (e) { /* jangan halang permainan */ }
+    }
+  }
+
   _num(k) { return this.d[k] || 0; }
+
+  /** Salinan bersih keadaan semasa, untuk dihantar ke Google Sheet. */
+  snapshot() { return JSON.parse(JSON.stringify(this.d)); }
+
+  /** Terima keadaan dari awan dan gabungkan dengan yang ada di peranti ini. */
+  applyRemote(remote) {
+    this.d = mergeStates(this.d, remote);
+    if (!this.d.stars) this.d.stars = {};
+    if (!this.d.badges) this.d.badges = [];
+    if (!this.d.owned) this.d.owned = [];
+    save(this.d);
+  }
 
   stars(topicId) { return this.d.stars[topicId] || 0; }
 

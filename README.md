@@ -14,31 +14,74 @@ Berfungsi 100% tanpa internet selepas dibuka kali pertama.
 
 ## Cara pasang di telefon anak
 
-- **Android (Chrome):** buka pautan di atas → menu ⋮ → *Add to Home screen* / *Install app*
+- **Android (Chrome):** buka pautan di atas → menu ⋮ → *Add to Home screen*
 - **iPhone (Safari):** buka pautan di atas → butang Kongsi → *Add to Home Screen*
 
-Ikon akan muncul di skrin utama seperti aplikasi biasa dan dibuka skrin penuh tanpa bar pelayar. Kemajuan murid disimpan dalam peranti itu sendiri.
+Ikon akan muncul di skrin utama seperti aplikasi biasa dan dibuka skrin penuh tanpa bar pelayar.
+
+## Kemas kini automatik
+
+Aplikasi menyemak fail terbaharu setiap kali dibuka semasa ada internet, jadi telefon anak sentiasa mendapat versi terkini dengan sendirinya. Tiada apa-apa perlu ditekan.
+
+Nombor versi dipaparkan di bahagian bawah skrin utama (contoh `Versi 1.1.0`). Bandingkan dengan nilai `APP_VERSION` dalam `config.js` untuk mengesahkan telefon sudah dikemas kini. Jika masih lama, tutup aplikasi sepenuhnya dan buka semula sekali.
+
+Setiap kali anda mengubah aplikasi, naikkan `APP_VERSION` dalam `config.js` supaya perubahan itu boleh dilihat.
+
+## Log masuk dan simpan kemajuan (pilihan)
+
+Tanpa log masuk, kemajuan disimpan dalam peranti itu sahaja. Dengan log masuk (**nama + PIN 4 angka**), kemajuan mengikut anak ke telefon, tablet atau komputer mana-mana.
+
+Data disimpan dalam **Google Sheet milik anda sendiri** — bukan pelayan orang lain.
+
+### Pemasangan (sekali sahaja, lebih kurang 5 minit)
+
+1. Buka https://sheets.new dan namakan hamparan itu **Matematik Ceria**.
+2. Menu **Extensions → Apps Script**.
+3. Padam kod contoh, tampal seluruh isi fail [`apps-script/Code.gs`](apps-script/Code.gs), tekan **Save**.
+4. Tekan **Deploy → New deployment**.
+5. Klik ikon gear di sebelah "Select type" → pilih **Web app**.
+6. Isi: *Execute as* = **Me**, *Who has access* = **Anyone**.
+   (Mesti "Anyone", bukan "Anyone with Google account" — jika tidak, aplikasi tidak dapat menyambung.)
+7. **Deploy** → **Authorize access** → pilih akaun Google anda → **Advanced** → **Go to … (unsafe)** → **Allow**.
+   Amaran itu normal; Google memaparkannya bagi semua skrip peribadi yang belum melalui semakan rasmi. Ini skrip anda sendiri.
+8. Salin **Web app URL** yang berakhir dengan `/exec`.
+9. Buka `config.js` dalam repo ini dan tampal URL itu:
+
+   ```js
+   export const SHEET_URL = "https://script.google.com/macros/s/……/exec";
+   ```
+
+Butang **Log masuk** akan muncul di penjuru atas kiri sebaik sahaja URL itu diisi.
+
+### Bagaimana kemajuan digabungkan
+
+Jika anak bermain pada dua peranti berasingan, kedua-dua kemajuan **bercantum**, bukan saling menimpa. Bagi setiap topik, bilangan bintang tertinggi diambil; avatar dan lencana daripada kedua-dua peranti disatukan; baki bintang dikira semula supaya kekal tepat. Logik yang sama digunakan di aplikasi dan di Google Sheet, dan telah diuji dengan 5,000 kes rawak untuk memastikan keputusannya sentiasa serupa.
+
+### Nota keselamatan
+
+Nama + PIN 4 angka ialah kunci mudah supaya kanak-kanak boleh ingat, bukan keselamatan sebenar. Sesiapa yang tahu nama dan PIN boleh melihat kemajuan itu. Gunakan nama panggilan sahaja dan jangan simpan maklumat peribadi di dalam Sheet.
+
+Jika PIN terlupa, ia tidak boleh dipulihkan — tetapi kemajuan pada peranti itu sendiri tetap selamat kerana ia disimpan secara berasingan.
 
 ## Struktur fail
 
 | Fail | Fungsi |
 |---|---|
 | `index.html` | Rangka aplikasi |
+| `config.js` | Nombor versi dan alamat Google Sheet |
 | `engine.js` | Penjana soalan + senarai topik silibus KSSR |
-| `store.js` | Simpanan kemajuan, lencana, kedai avatar (localStorage) |
+| `store.js` | Simpanan kemajuan, lencana, kedai avatar, logik gabungan |
+| `sync.js` | Log masuk dan penyegerakan dengan Google Sheet |
 | `visuals.js` | Lukisan SVG: jam, pai pecahan, bentuk, carta bar, satah koordinat, syiling |
 | `app.js` | Navigasi dan semua skrin |
 | `styles.css` | Gaya paparan |
-| `sw.js` | Service worker — membolehkan penggunaan tanpa internet |
+| `sw.js` | Service worker — kemas kini automatik + guna tanpa internet |
 | `manifest.webmanifest` | Tetapan PWA (nama, ikon, warna) |
+| `apps-script/Code.gs` | Kod untuk Google Apps Script (bukan sebahagian laman web) |
 
 ## Ubah suai soalan
 
 Semua penjana soalan dan senarai topik ada dalam `engine.js`. Objek `Syllabus` di bahagian atas fail mengandungi senarai topik setiap tahun — anda boleh tambah topik, ubah julat nombor, atau tambah jenis soalan baharu di situ.
-
-## Keluarkan versi baharu
-
-Selepas mengubah mana-mana fail, naikkan nilai `VERSION` dalam `sw.js` (contoh `v1.0.0` → `v1.0.1`). Peranti akan memuat turun fail baharu secara automatik pada kali seterusnya ada internet.
 
 ## Cuba di komputer
 

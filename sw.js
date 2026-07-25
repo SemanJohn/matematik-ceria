@@ -1,16 +1,25 @@
 /* Service worker — Matematik Ceria
-   Strategi: cache-first untuk aset aplikasi supaya berfungsi 100% tanpa internet. */
+ *
+ * Strategi: NETWORK-FIRST dengan had masa, jatuh balik ke cache.
+ *
+ * Kesannya: setiap kali ada internet, peranti sentiasa dapat fail terbaharu
+ * secara automatik — tiada perlu naikkan nombor versi secara manual.
+ * Bila tiada internet (atau rangkaian perlahan), salinan cache digunakan,
+ * jadi aplikasi tetap berfungsi 100% luar talian.
+ */
 
-const VERSION = "v1.0.0";
-const CACHE = "matematik-ceria-" + VERSION;
+const CACHE = "matematik-ceria";
+const NET_TIMEOUT = 4000;
 
 const ASSETS = [
   "./",
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./config.js",
   "./engine.js",
   "./store.js",
+  "./sync.js",
   "./visuals.js",
   "./manifest.webmanifest",
   "./icons/icon.svg",
@@ -21,7 +30,10 @@ const ASSETS = [
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting())
+    caches
+      .open(CACHE)
+      .then((c) => c.addAll(ASSETS).catch(() => {}))
+      .then(() => self.skipWaiting())
   );
 });
 
@@ -34,39 +46,49 @@ self.addEventListener("activate", (e) => {
   );
 });
 
+/** Cuba rangkaian dahulu; jika gagal atau terlalu lama, guna cache. */
+async function networkFirst(req) {
+  const cache = await caches.open(CACHE);
+
+  // .catch di sini penting: tanpanya, kegagalan rangkaian yang berlaku
+  // selepas had masa tamat akan menjadi ralat tergantung.
+  const fromNet = fetch(req)
+    .then((res) => {
+      if (res && res.status === 200 && res.type === "basic") cache.put(req, res.clone());
+      return res;
+    })
+    .catch(() => null);
+
+  const timeout = new Promise((resolve) => setTimeout(() => resolve(null), NET_TIMEOUT));
+
+  const res = await Promise.race([fromNet, timeout]);
+  if (res) return res;
+
+  const hit = await cache.match(req);
+  if (hit) return hit;
+
+  // Rangkaian lambat tetapi tiada salinan cache: tunggu rangkaian sepenuhnya.
+  const akhir = await fromNet;
+  return akhir || Response.error();
+}
+
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
 
-  // Navigasi: cuba rangkaian, jatuh balik ke index yang di-cache.
+  const url = new URL(req.url);
+  if (url.origin !== self.location.origin) return; // Google Sheets dll. — biar lalu terus
+
   if (req.mode === "navigate") {
     e.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put("./index.html", copy));
-          return res;
-        })
-        .catch(() => caches.match("./index.html"))
+      networkFirst(req).catch(() =>
+        caches.open(CACHE).then((c) => c.match("./index.html"))
+      )
     );
     return;
   }
 
-  e.respondWith(
-    caches.match(req).then(
-      (hit) =>
-        hit ||
-        fetch(req)
-          .then((res) => {
-            if (res && res.status === 200 && res.type === "basic") {
-              const copy = res.clone();
-              caches.open(CACHE).then((c) => c.put(req, copy));
-            }
-            return res;
-          })
-          .catch(() => hit)
-    )
-  );
+  e.respondWith(networkFirst(req));
 });
 
 self.addEventListener("message", (e) => {

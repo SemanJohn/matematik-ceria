@@ -217,6 +217,49 @@ h2 { font-size: 1.4rem; font-weight: 800; margin: 0; }
 .modal p { margin: 0; }
 .modal .link { color: var(--ungu); margin-top: 12px; }
 
+/* Bar atas: akaun di kiri, streak dan bintang di kanan */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  width: 100%; gap: 10px; flex-wrap: wrap;
+}
+.topbar-kanan { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+
+.chip.akaun {
+  border: none; font-family: inherit; color: #fff; cursor: pointer;
+  background: rgba(255,255,255,.25); max-width: 60vw;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  transition: transform .08s ease;
+}
+.chip.akaun:active { transform: scale(.96); }
+.chip.akaun.masuk { background: rgba(255,255,255,.34); }
+.chip.kosong { background: none; padding: 0; }
+
+.versi { margin-top: 22px; font-size: .78rem; opacity: .65; letter-spacing: .3px; }
+
+.panel {
+  background: rgba(255,255,255,.18); border-radius: 16px;
+  padding: 14px 16px; margin-bottom: 16px;
+}
+.p-besar { font-size: 1.2rem; font-weight: 700; margin: 0 0 6px; }
+.p-kecil { font-size: .86rem; line-height: 1.55; opacity: .92; margin: 0; }
+.p-kecil.pusat { text-align: center; margin-top: 16px; }
+
+.medan { display: block; margin-bottom: 14px; }
+.medan span { display: block; font-weight: 700; margin-bottom: 6px; font-size: .95rem; }
+.medan input {
+  width: 100%; box-sizing: border-box; border: none; border-radius: 14px;
+  padding: 15px 16px; font-size: 1.1rem; font-family: inherit;
+  color: var(--teks); background: #fff;
+}
+.medan input:focus { outline: 3px solid var(--emas); }
+
+.ralat {
+  background: rgba(229,57,53,.92); border-radius: 12px;
+  padding: 11px 14px; font-weight: 600; font-size: .9rem; margin: 0 0 4px;
+}
+
+.big:disabled { opacity: .6; cursor: default; }
+
 /* Toast */
 .toast {
   position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);

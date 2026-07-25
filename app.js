@@ -1,8 +1,10 @@
 /* Matematik Ceria — logik aplikasi web (port daripada MainActivity + Screens.kt) */
 
+import { APP_VERSION } from "./config.js";
 import { Syllabus, generate } from "./engine.js";
 import { store, Badges, AvatarShop } from "./store.js";
 import { renderVisual, esc } from "./visuals.js";
+import * as sync from "./sync.js";
 
 const app = document.getElementById("app");
 const TOTAL_Q = 10;
@@ -34,6 +36,7 @@ function hashOf(s) {
     case "challenge": return "cabaran/" + s.year;
     case "shop": return "kedai";
     case "badges": return "lencana";
+    case "login": return "masuk";
     default: return "";
   }
 }
@@ -77,12 +80,43 @@ function toast(msg) {
 
 /* ---------- Skrin: Laman Utama ---------- */
 
+const IKON_SYNC = {
+  selamat: "✅",
+  menghantar: "🔄",
+  menunggu: "⏳",
+  "luar-talian": "📴"
+};
+
+const LABEL_SYNC = {
+  selamat: "Kemajuan tersimpan",
+  menghantar: "Sedang menyimpan…",
+  menunggu: "Menunggu untuk simpan",
+  "luar-talian": "Luar talian — akan simpan nanti"
+};
+
+/** Butang akaun di penjuru atas kiri. */
+function akaunChip() {
+  if (!sync.syncEnabled()) return `<span class="chip kosong"></span>`;
+  const a = sync.akaun();
+  if (!a) {
+    return `<button class="chip akaun masuk" data-act="nav-login">🔑 Log masuk</button>`;
+  }
+  const s = sync.status();
+  return `<button class="chip akaun" id="akaunChip" data-act="nav-login"
+    title="${esc(LABEL_SYNC[s.keadaan] || "")}">
+    👤 ${esc(a.nama)} <span class="state">${IKON_SYNC[s.keadaan] || ""}</span>
+  </button>`;
+}
+
 function homeView() {
   return `
   <div class="wrap center">
-    <div class="row spread">
-      ${chip("🔥 " + store.streak() + " hari")}
-      ${chip("⭐ " + store.balance())}
+    <div class="topbar">
+      ${akaunChip()}
+      <div class="topbar-kanan">
+        ${chip("🔥 " + store.streak() + " hari")}
+        ${chip("⭐ " + store.balance())}
+      </div>
     </div>
     <div class="avatar">${store.equippedEmoji()}</div>
     <h1>Matematik Ceria</h1>
@@ -94,7 +128,74 @@ function homeView() {
       ${bigBtn("🛍️  Kedai Avatar", "red", "nav-kedai")}
     </div>
     <button class="link" data-act="pasang" hidden id="installBtn">📲 Pasang aplikasi ini</button>
+    <p class="versi">Versi ${esc(APP_VERSION)}</p>
   </div>`;
+}
+
+/* ---------- Skrin: Log Masuk ---------- */
+
+let loginRalat = "";
+let loginSibuk = false;
+
+function loginView() {
+  const a = sync.akaun();
+  if (a) {
+    return `
+    <div class="wrap">
+      ${header("🔑 Akaun")}
+      <div class="panel">
+        <p class="p-besar">👤 ${esc(a.nama)}</p>
+        <p class="p-kecil">Kemajuan disimpan secara automatik. Log masuk dengan nama
+        dan PIN yang sama pada telefon atau tablet lain untuk teruskan di situ.</p>
+      </div>
+      <div class="stack">
+        ${bigBtn("🔄 Simpan sekarang", "green", "sync-now")}
+        ${bigBtn("🚪 Log keluar", "red", "logout")}
+      </div>
+      <p class="p-kecil pusat">Log keluar tidak memadam kemajuan pada peranti ini.</p>
+    </div>`;
+  }
+  return `
+  <div class="wrap">
+    ${header("🔑 Log Masuk")}
+    <div class="panel">
+      <p class="p-kecil">Taip nama dan PIN 4 angka. Gunakan yang sama pada setiap
+      peranti supaya bintang dan lencana ikut ke mana-mana. Kali pertama menaip
+      nama baharu akan terus mendaftarkannya.</p>
+    </div>
+    <label class="medan">
+      <span>Nama</span>
+      <input id="inNama" type="text" autocomplete="off" placeholder="Contoh: Aisyah" maxlength="40">
+    </label>
+    <label class="medan">
+      <span>PIN 4 angka</span>
+      <input id="inPin" type="tel" inputmode="numeric" autocomplete="off" placeholder="Contoh: 2018" maxlength="4">
+    </label>
+    ${loginRalat ? `<p class="ralat">${esc(loginRalat)}</p>` : ""}
+    <div class="stack">
+      ${bigBtn(loginSibuk ? "Sila tunggu…" : "✅ Masuk", "green", "do-login", loginSibuk ? "disabled" : "")}
+    </div>
+    <p class="p-kecil pusat">Ingat PIN itu. Tiada cara memulihkannya jika lupa —
+    tetapi kemajuan pada peranti ini tetap selamat.</p>
+  </div>`;
+}
+
+async function doLogin() {
+  const nama = (document.getElementById("inNama") || {}).value || "";
+  const pin = (document.getElementById("inPin") || {}).value || "";
+  loginRalat = "";
+  loginSibuk = true;
+  render();
+  try {
+    const r = await sync.logMasuk(nama, pin);
+    loginSibuk = false;
+    go({ name: "home" });
+    toast(r.baharu ? `Akaun ${r.nama} dicipta 🎉` : `Selamat kembali, ${r.nama}! 👋`);
+  } catch (e) {
+    loginSibuk = false;
+    loginRalat = e && e.message ? e.message : "Gagal log masuk. Semak internet.";
+    render();
+  }
 }
 
 /* ---------- Skrin: Pilih Tahun ---------- */
@@ -429,6 +530,7 @@ function render() {
     case "challenge": html = challengeView(); break;
     case "shop": html = shopView(); break;
     case "badges": html = badgesView(); break;
+    case "login": html = loginView(); break;
     default: html = homeView();
   }
   app.innerHTML = html + (modal ? difficultyDialog(modal) : "");
@@ -449,6 +551,19 @@ app.addEventListener("click", (e) => {
     case "nav-cabaran": go({ name: "years", forChallenge: true }); break;
     case "nav-lencana": go({ name: "badges" }); break;
     case "nav-kedai": go({ name: "shop" }); break;
+    case "nav-login": loginRalat = ""; go({ name: "login" }); break;
+    case "do-login": doLogin(); break;
+    case "logout":
+      sync.logKeluar();
+      go({ name: "home" });
+      toast("Sudah log keluar. Kemajuan kekal di peranti ini.");
+      break;
+    case "sync-now":
+      toast("Menyimpan…");
+      sync.tolak()
+        .then(() => toast("Kemajuan tersimpan ✅"))
+        .catch(() => toast("Gagal menyimpan. Semak internet."));
+      break;
     case "year": {
       const y = +el.dataset.y;
       if (screen.forChallenge) startChallenge(y);
@@ -507,9 +622,24 @@ async function doInstall() {
   if (btn) btn.hidden = true;
 }
 
+/* ---------- PWA: kemas kini automatik ----------
+ * Service worker mengambil fail dari rangkaian dahulu, jadi setiap kali ada
+ * internet peranti terus dapat versi terbaharu. Di sini kita hanya memastikan
+ * sw.js itu sendiri turut disemak — semasa dibuka dan setiap sejam selepas itu.
+ */
+
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  window.addEventListener("load", async () => {
+    try {
+      const reg = await navigator.serviceWorker.register("./sw.js");
+      reg.update().catch(() => {});
+      setInterval(() => reg.update().catch(() => {}), 60 * 60 * 1000);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") reg.update().catch(() => {});
+      });
+    } catch (e) {
+      /* luar talian atau tidak disokong — aplikasi tetap berjalan */
+    }
   });
 }
 
@@ -521,10 +651,29 @@ function screenFromHash() {
   if (h === "cabaran") return { name: "years", forChallenge: true };
   if (h === "kedai") return { name: "shop" };
   if (h === "lencana") return { name: "badges" };
+  if (h === "masuk") return { name: "login" };
   const m = h.match(/^tahun\/([1-6])$/);
   if (m) return { name: "map", year: +m[1] };
   return { name: "home" };
 }
+
+// Setiap perubahan kemajuan dijadualkan untuk disimpan ke awan.
+store.onChange = () => sync.jadualTolak();
+
+// Kemas kini teks status tanpa melukis semula skrin (supaya taipan tidak hilang).
+sync.bilaBerubah(() => {
+  const el = document.getElementById("akaunChip");
+  if (el && screen.name === "home") {
+    const s = sync.status();
+    const state = el.querySelector(".state");
+    if (state) state.textContent = IKON_SYNC[s.keadaan] || "";
+    el.title = LABEL_SYNC[s.keadaan] || "";
+  }
+});
+
+sync.mulakan(() => {
+  if (screen.name === "home" || screen.name === "map" || screen.name === "years") render();
+});
 
 screen = screenFromHash();
 history.replaceState(screen, "", "#" + hashOf(screen));
