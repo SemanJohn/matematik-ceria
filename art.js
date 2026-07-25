@@ -93,19 +93,23 @@ const MASKOT = {
     ${pipi(26, 64)}${pipi(74, 64)}`,
 
   singa: () => `
-    <g fill="#F0952F">
-      <circle cx="50" cy="18" r="13"/><circle cx="82" cy="34" r="13"/>
-      <circle cx="82" cy="70" r="13"/><circle cx="50" cy="86" r="13"/>
-      <circle cx="18" cy="70" r="13"/><circle cx="18" cy="34" r="13"/>
-      <circle cx="68" cy="22" r="12"/><circle cx="32" cy="22" r="12"/>
-      <circle cx="68" cy="82" r="12"/><circle cx="32" cy="82" r="12"/>
+    <g fill="#E07B18">
+      <circle cx="50" cy="12" r="14"/><circle cx="77" cy="21" r="14"/>
+      <circle cx="88" cy="46" r="14"/><circle cx="88" cy="72" r="14"/>
+      <circle cx="66" cy="88" r="14"/><circle cx="34" cy="88" r="14"/>
+      <circle cx="12" cy="72" r="14"/><circle cx="12" cy="46" r="14"/>
+      <circle cx="23" cy="21" r="14"/>
     </g>
-    <circle cx="50" cy="52" r="31" fill="#FFC46B"/>
-    <ellipse cx="50" cy="65" rx="20" ry="15" fill="#FFEBC7"/>
-    ${mata(39, 48)}${mata(61, 48)}
-    <path d="M50 60 44 66h12Z" fill="#8C4A2F"/>
-    ${senyum("M50 66v4M50 70q-6 6-10 1M50 70q6 6 10 1", "#8C4A2F", 2.6)}
-    ${pipi(30, 60, 6)}${pipi(70, 60, 6)}`,
+    <g fill="#F5A23C">
+      <circle cx="50" cy="20" r="11"/><circle cx="80" cy="50" r="11"/>
+      <circle cx="50" cy="80" r="11"/><circle cx="20" cy="50" r="11"/>
+    </g>
+    <circle cx="50" cy="50" r="29" fill="#FFC46B"/>
+    <ellipse cx="50" cy="62" rx="19" ry="14" fill="#FFEBC7"/>
+    ${mata(39, 46)}${mata(61, 46)}
+    <path d="M50 57 44 63h12Z" fill="#8C4A2F"/>
+    ${senyum("M50 63v4M50 67q-6 6-10 1M50 67q6 6 10 1", "#8C4A2F", 2.6)}
+    ${pipi(31, 58, 6)}${pipi(69, 58, 6)}`,
 
   robot: () => `
     <path d="M50 14V4" stroke="#94A3B8" stroke-width="4" stroke-linecap="round"/>
@@ -299,18 +303,26 @@ const GLIF = {
     <rect x="44" y="56" width="12" height="10" fill="${c}"/><rect x="36" y="66" width="28" height="6" rx="3" fill="${c}"/>`,
   perfect: (c) => `<text x="50" y="62" font-size="30" font-weight="800" fill="${c}" text-anchor="middle">100</text>`,
   perfect_10: (c) => `<path d="M50 26 57 44l19 1-15 12 5 19-16-11-16 11 5-19-15-12 19-1Z" fill="${c}"/>`,
-  streak_3: (c) => `<path d="M50 24c10 12 16 18 16 28a16 16 0 0 1-32 0c0-6 3-10 6-14 2 4 4 6 6 6 0-8 0-14 4-20Z" fill="${c}"/>`,
+  streak_3: (c) => `
+    <path d="M50 22c3 10 9 13 13 21a16 16 0 0 1-13 25 16 16 0 0 1-13-25c3-5 6-6 8-11 2 4 3 6 5 7 0-6-1-11 0-17Z" fill="${c}"/>
+    <path d="M50 48c2 5 6 7 6 12a6 6 0 0 1-12 0c0-4 4-7 6-12Z" fill="#FFD166"/>`,
   streak_7: (c) => `<path d="M56 22 34 54h12l-6 26 22-34H50Z" fill="${c}"/>`,
   stars_50: (c) => `<path d="M50 28 55 44l16 6-16 6-5 16-5-16-16-6 16-6Z" fill="${c}"/>
     <circle cx="72" cy="34" r="4" fill="${c}"/><circle cx="30" cy="66" r="3" fill="${c}"/>`,
   stars_150: (c) => `<path d="M28 62 24 34l14 10 12-16 12 16 14-10-4 28Z" fill="${c}"/>
     <rect x="28" y="64" width="44" height="8" rx="4" fill="${c}"/>`,
-  challenge_10: (c) => `<path d="M50 22c10 8 14 20 14 32l-6 8H42l-6-8c0-12 4-24 14-32Z" fill="${c}"/>
-    <circle cx="50" cy="44" r="5" fill="#fff"/>
-    <path d="M42 64l-6 12 10-4M58 64l6 12-10-4" fill="${c}" opacity=".6"/>`,
-  challenge_20: (c) => `<ellipse cx="50" cy="54" rx="26" ry="9" fill="${c}"/>
-    <path d="M36 50a14 14 0 0 1 28 0Z" fill="${c}" opacity=".7"/>
-    <circle cx="38" cy="58" r="3" fill="#fff"/><circle cx="50" cy="60" r="3" fill="#fff"/><circle cx="62" cy="58" r="3" fill="#fff"/>`,
+  challenge_10: (c) => `
+    <path d="M50 20c9 9 13 21 13 33v9H37v-9c0-12 4-24 13-33Z" fill="${c}"/>
+    <circle cx="50" cy="42" r="6" fill="#fff"/>
+    <path d="M37 48 27 62v8l10-6ZM63 48l10 14v8l-10-6Z" fill="${c}" opacity=".65"/>
+    <path d="M44 62h12l-6 14Z" fill="#FF8A3D"/>`,
+  challenge_20: (c) => `
+    <path d="M26 56h48l-8 10H34Z" fill="${c}" opacity=".55"/>
+    <ellipse cx="50" cy="54" rx="30" ry="8" fill="${c}"/>
+    <path d="M34 50a16 16 0 0 1 32 0Z" fill="#fff" stroke="${c}" stroke-width="3"/>
+    <circle cx="36" cy="70" r="3.5" fill="${c}"/>
+    <circle cx="50" cy="74" r="3.5" fill="${c}" opacity=".7"/>
+    <circle cx="64" cy="70" r="3.5" fill="${c}"/>`,
   hard_master: (c) => `<path d="M38 30a12 12 0 0 1 24 0 12 12 0 0 1 8 20 12 12 0 0 1-14 18 12 12 0 0 1-12 0 12 12 0 0 1-14-18 12 12 0 0 1 8-20Z" fill="${c}"/>
     <path d="M50 32v34M40 42h20M42 56h16" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>`
 };
@@ -335,10 +347,12 @@ export function lencana(id, dapat = true) {
 const D_BINTANG = "M50 8 62 38l32 2-25 21 8 31-27-17-27 17 8-31L6 40l32-2Z";
 
 export function bintang(penuh, kelas = "") {
+  // Bintang kosong guna kelabu, bukan putih lut sinar: kad topik berlatar putih,
+  // jadi bintang putih akan hilang terus daripada pandangan.
   return svg(
     penuh
       ? `<path d="${D_BINTANG}" fill="#FFC93C" stroke="#F0A500" stroke-width="4" stroke-linejoin="round"/>`
-      : `<path d="${D_BINTANG}" fill="rgba(255,255,255,.22)" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linejoin="round"/>`,
+      : `<path d="${D_BINTANG}" fill="#E2E6F3" stroke="#BFC6DD" stroke-width="4" stroke-linejoin="round"/>`,
     "bintang " + kelas
   );
 }
@@ -413,11 +427,13 @@ export const ICON = {
 /* ---------- Latar hiasan ---------- */
 
 /** Bentuk lembut di belakang skrin utama supaya tidak nampak kosong. */
+/* Bulatan lembut sahaja — sebarang bentuk tajam di tengah akan kelihatan
+   seperti kerosakan paparan di belakang maskot dan tajuk. */
 export const latarHias = () => `
 <svg class="hias" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-  <circle cx="60" cy="50" r="46" fill="rgba(255,255,255,.10)" class="mc-apung"/>
-  <circle cx="340" cy="90" r="30" fill="rgba(255,255,255,.09)" class="mc-apung d2"/>
-  <circle cx="300" cy="240" r="54" fill="rgba(255,255,255,.07)" class="mc-apung d3"/>
-  <circle cx="90" cy="250" r="24" fill="rgba(255,255,255,.10)" class="mc-apung d4"/>
-  <path d="M200 20 208 44l24 8-24 8-8 24-8-24-24-8 24-8Z" fill="rgba(255,255,255,.12)" class="mc-apung d2"/>
+  <circle cx="46" cy="44" r="52" fill="rgba(255,255,255,.09)" class="mc-apung"/>
+  <circle cx="368" cy="96" r="34" fill="rgba(255,255,255,.08)" class="mc-apung d2"/>
+  <circle cx="330" cy="252" r="60" fill="rgba(255,255,255,.06)" class="mc-apung d3"/>
+  <circle cx="70" cy="256" r="26" fill="rgba(255,255,255,.09)" class="mc-apung d4"/>
+  <circle cx="378" cy="182" r="16" fill="rgba(255,255,255,.07)" class="mc-apung"/>
 </svg>`;
