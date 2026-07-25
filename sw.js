@@ -16,6 +16,7 @@ const ASSETS = [
   "./index.html",
   "./styles.css",
   "./app.js",
+  "./art.js",
   "./config.js",
   "./engine.js",
   "./store.js",

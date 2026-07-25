@@ -10,7 +10,7 @@
  *   Rujuk fail apps-script/Code.gs dan README untuk langkah pemasangan.
  */
 
-export const APP_VERSION = "1.2.0";
+export const APP_VERSION = "1.3.0";
 
 export const SHEET_URL =
   "https://script.google.com/macros/s/AKfycbyIfUe22TpQylAY2WgqW3KSScn2jQO4Wcr_-9aNaTyLkF5SJuYCpl8-UZrei92QeMU/exec";
